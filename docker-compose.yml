@@ -1,0 +1,28 @@
+version: '3'
+services:
+  api:
+    container_name: docker-node-api
+    restart: always
+    build: ./api
+    ports:
+      - '3000:3000'
+    volumes:
+      - ./dbdata:/usr/src/app # ./dbdata must exist in the host machine this is where mongodb will write
+      - /usr/src/app/node_modules
+    depends_on:
+      - 'mongo'
+    links:
+      - 'mongo'
+  mongo:
+    container_name: mongo
+    image: 'mongo'
+    ports:
+      - '27017:27017'
+    environment:
+      MONGO_INITDB_DATABASE: test-database
+      # MONGO_INITDB_ROOT_USERNAME: root
+      # MONGO_INITDB_ROOT_PASSWORD: example
+  adminmongo:
+    image: 'mrvautin/adminmongo'
+    ports:
+      - '1234:1234'
