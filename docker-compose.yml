@@ -6,20 +6,19 @@ services:
     build: ./api
     ports:
       - '3000:3000'
-    volumes:
-      - ./dbdata:/usr/src/app # ./dbdata must exist in the host machine this is where mongodb will write
-      - /usr/src/app/node_modules
     depends_on:
-      - 'mongo'
+      - 'database'
     links:
-      - 'mongo'
-  mongo:
-    container_name: mongo
+      - 'database'
+  database:
+    container_name: my-mongo-database
     image: 'mongo'
     ports:
       - '27017:27017'
+    volumes:
+      - ./dbdata:/data/db # ./dbdata must exist in the host machine this is where mongodb will write
     environment:
-      MONGO_INITDB_DATABASE: test-database
+      - MONGO_INITDB_DATABASE=test-database
       # MONGO_INITDB_ROOT_USERNAME: root
       # MONGO_INITDB_ROOT_PASSWORD: example
   adminmongo:
