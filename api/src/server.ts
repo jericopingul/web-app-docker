@@ -8,12 +8,12 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 // TODO implement where data is stored https://hub.docker.com/_/mongo
 mongoose
-  // .connect('mongodb://mongo:27017/docker-node-mongo', { useNewUrlParser: true })
+  .connect('mongodb://mongo:27017/docker-node-mongo', { useNewUrlParser: true })
   // create db using "use <dbname>" or pass into env variable in compose
   // docker run --name test-mongo -v dbdata:/data/db -p 27017:27017 mongo
-  .connect('mongodb://localhost:27017/test-database', {
-    useNewUrlParser: true
-  })
+  // .connect('mongodb://localhost:27017/test-database', {
+  //   useNewUrlParser: true
+  // })
   .then(() => console.log('MongoDB Connected'))
   .catch((err: Error) => console.log(err));
 
