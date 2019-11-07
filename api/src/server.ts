@@ -1,8 +1,13 @@
 import express, { Request, Response, Application, NextFunction } from 'express';
 import mongoose from 'mongoose';
 import bodyParser from 'body-parser';
+import redis, { RedisClient } from 'redis';
 
 const app: Application = express();
+const redisClient: RedisClient = redis.createClient({
+  host: 'redis_cache',
+  port: 6379 // default redis port,
+});
 
 app.use(bodyParser.urlencoded({ extended: false }));
 
@@ -22,7 +27,15 @@ app.get('/', (req: Request, res: Response, next: NextFunction) => {
   res.send('Hello world 5');
 });
 
-const port = 3000;
+redisClient.set('visits', '0');
+app.get('/redis', (req: Request, res: Response, next: NextFunction) => {
+  redisClient.get('visits', (err, visits) => {
+    res.send('Number of visits is' + (parseInt(visits) + 1));
+    redisClient.set('visits', String(parseInt(visits) + 1));
+  });
+});
+
+const port = process.env.PORT || 3000;
 
 app.listen(port, () => {
   console.log('Example app running on port 3000');

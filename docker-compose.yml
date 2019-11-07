@@ -8,8 +8,10 @@ services:
       - '3000:3000'
     depends_on:
       - 'database'
+      - 'redis_cache'
     links:
       - 'database'
+      - 'redis_cache'
   database:
     container_name: my-mongo-database
     image: 'mongo'
@@ -21,6 +23,11 @@ services:
       - MONGO_INITDB_DATABASE=test-database
       # MONGO_INITDB_ROOT_USERNAME: root
       # MONGO_INITDB_ROOT_PASSWORD: example
+  redis_cache:
+    container_name: my-redis-cache
+    image: redis
+    expose:
+      - 6379
   adminmongo:
     image: 'mrvautin/adminmongo'
     ports:
